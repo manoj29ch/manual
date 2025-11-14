@@ -1,0 +1,1313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Lab Manual — Full Programs & Outputs (Glass UI)</title>
+
+  <!-- Prism for syntax highlighting -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #0c0c19 0%, #171228 100%);
+      --accent: rgba(125,200,255,0.95);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:#eaf6ff}
+    .app {min-height:100vh;display:grid;grid-template-columns:360px 1fr;padding:36px;gap:24px;box-sizing:border-box}
+    .sidebar{padding:20px;border-radius:14px;backdrop-filter:blur(10px);background:rgba(255,255,255,0.02);height:calc(100vh - 72px);overflow:auto}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#9a7bff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#032a3a}
+    h1{margin:0;font-size:18px}
+    p.sub{margin:0;color:rgba(255,255,255,0.75);font-size:13px}
+    .exp-list{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+    .exp-card{padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .viewer{padding:26px;border-radius:14px;backdrop-filter:blur(8px);background:rgba(255,255,255,0.02);height:calc(100vh - 72px);overflow:auto;border:1px solid rgba(255,255,255,0.03)}
+    .controls{display:flex;justify-content:space-between;align-items:center;position:sticky;top:12px;background:transparent;padding-bottom:14px}
+    .back-btn{padding:8px 12px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    pre.code{background:rgba(4,6,18,0.6);padding:14px;border-radius:10px;overflow:auto}
+    .aim, .result {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #e8f7ff;
+  font-size: 14px;
+  line-height: 1.6;
+
+  /* KEY FIX FOR VERTICAL OUTPUT */
+  white-space: pre-line;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+}
+    .citation{font-size:12px;color:#9fd1ff;margin-top:10px}
+    @media (max-width:900px){.app{grid-template-columns:1fr;padding:14px}.sidebar{order:2;height:auto;margin-top:18px}.viewer{order:1}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="logo">ML</div>
+        <div>
+          <h1>Deep Learning Lab Manual</h1>
+          <p class="sub">Full programs & outputs — click an experiment</p>
+        </div>
+      </div>
+
+      <div class="exp-list" id="expList"></div>
+    </aside>
+
+    <main class="viewer" id="viewer">
+      <div class="controls">
+        <div><button class="back-btn" id="backBtn" style="display:none" onclick="showList()">← Back</button></div>
+        <div><button class="back-btn" onclick="window.location.href='#'">Exit</button></div>
+      </div>
+
+      <div id="contentPlaceholder" style="text-align:center;margin-top:6vh">
+        <h2 style="margin-bottom:6px">Welcome</h2>
+        <p style="color:rgba(255,255,255,0.8)">Select an experiment from the left to view the full program and complete output exactly as in the uploaded Manual.pdf.</p>
+        <p style="color:rgba(255,255,255,0.6);margin-top:18px">Source: Manual.pdf. :contentReference[oaicite:1]{index=1}</p>
+      </div>
+
+      <div id="expView" style="display:none">
+        <h2 id="expTitle"></h2>
+        <div class="aim"><strong>Aim:</strong> <span id="expAim"></span></div>
+
+        <div style="margin-top:14px">
+          <h3>Source Code (full)</h3>
+          <pre class="code"><code id="expCode" class="language-python"></code></pre>
+        </div>
+
+        <div style="margin-top:14px">
+          <h3>Result / Output (full)</h3>
+          <div class="result" id="expResult"></div>
+        </div>
+
+        <div class="citation" id="expCitation"></div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Full programs & outputs — verbatim extracted from Manual.pdf (file citation: turn2file0)
+    const experiments = [
+      {
+        id:1,
+        title:'EXERCISE - 1: Build a Convolution Neural Network for Image Recognition',
+        aim:'Build a Convolution Neural Network for Image Recognition.',
+        code:
+`import tensorflow as tf
+from tensorflow.keras import layers, models
+
+# Step 1: Load and preprocess the dataset (e.g., CIFAR-10)
+# Replace this with your dataset loading and preprocessing code
+# For example, with CIFAR-10:
+from tensorflow.keras.datasets import cifar10
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+# Step 2: Define the CNN model
+model = models.Sequential()
+model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+
+# Step 3: Flatten the 3D output to 1D and add Dense layers for classification
+model.add(layers.Flatten())
+model.add(layers.Dense(64, activation='relu'))
+model.add(layers.Dense(10, activation='softmax'))  # Assuming 10 classes for CIFAR-10
+
+# Step 4: Compile the model
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
+# Step 5: Train the model
+# Replace the placeholders with your training data and labels
+model.fit(x_train, y_train, epochs=10, batch_size=32, validation_data=(x_test, y_test))
+
+# Step 6: Evaluate the model
+test_loss, test_acc = model.evaluate(x_test, y_test)
+print("Test accuracy:", test_acc)
+`,
+        result:
+`Result:
+Downloading data from https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz
+170498071/170498071 [==============================] - 7s 0us/step
+Epoch 1/10
+1563/1563 [==============================] - 56s 34ms/step - loss: 1.7659 - accuracy: 0.3827 - val_loss: 1.4559 - val_accuracy: 0.4655
+Epoch 2/10
+1563/1563 [==============================] - 52s 33ms/step - loss: 1.3744 - accuracy: 0.5078 - val_loss: 1.3300 - val_accuracy: 0.5203
+Epoch 3/10
+1563/1563 [==============================] - 52s 33ms/step - loss: 1.2385 - accuracy: 0.5607 - val_loss: 1.2420 - val_accuracy: 0.5709
+Epoch 4/10
+1563/1563 [==============================] - 50s 32ms/step - loss: 1.1355 - accuracy: 0.6019 - val_loss: 1.1483 - val_accuracy: 0.5969
+Epoch 5/10
+1563/1563 [==============================] - 51s 33ms/step - loss: 1.0459 - accuracy: 0.6322 - val_loss: 1.0826 - val_accuracy: 0.6224
+Epoch 6/10
+1563/1563 [==============================] - 52s 33ms/step - loss: 0.9758 - accuracy: 0.6607 - val_loss: 1.1183 - val_accuracy: 0.6212
+Epoch 7/10
+1563/1563 [==============================] - 60s 38ms/step - loss: 0.9119 - accuracy: 0.6821 - val_loss: 1.0722 - val_accuracy: 0.6469
+Epoch 8/10
+1563/1563 [==============================] - 57s 37ms/step - loss: 0.8683 - accuracy: 0.6982 - val_loss: 1.0293 - val_accuracy: 0.6566
+Epoch 9/10
+1563/1563 [==============================] - 60s 38ms/step - loss: 0.8196 - accuracy: 0.7165 - val_loss: 1.0136 - val_accuracy: 0.6623
+Epoch 10/10
+1563/1563 [==============================] - 59s 38ms/step - loss: 0.7767 - accuracy: 0.7316 - val_loss: 1.0620 - val_accuracy: 0.6629
+313/313 [==============================] - 3s 10ms/step - loss: 1.0620 - accuracy: 0.6629
+Test accuracy: 0.6628999710083008`,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:2]{index=2}'
+      },
+
+      {
+        id:2,
+        title:'EXERCISE - 2: Design Artificial Neural Networks for Identifying and Classifying an actor using Kaggle Dataset',
+        aim:'Design Artificial Neural Networks for Identifying and Classifying an actor using Kaggle Dataset.',
+        code:
+`# Importing necessary libraries
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+from sklearn.preprocessing import LabelEncoder
+from tensorflow.python.keras import utils
+from keras.models import Sequential
+from keras.layers import Dense, Flatten, InputLayer
+import keras
+from keras.utils import np_utils
+import imageio # To read images
+from PIL import Image # For image resizing
+
+# upload zip train and test datasets in content folder. After uploading the folders unzip the datasets as shown below
+!unzip /content/agedetectiontrain.zip
+!unzip /content/agedetectiontest.zip
+
+# Reading the data
+train = pd.read_csv('/content/train.csv')
+test = pd.read_csv('/content/test.csv')
+
+# Image resizing of train data into single numpy array
+temp = []
+for img_name in train.ID:
+    img_path = os.path.join('/content/Train', img_name)
+    img = imageio.imread(img_path)
+    img = np.array(Image.fromarray(img).resize((32, 32))).astype('float32')
+    temp.append(img)
+
+train_x = np.stack(temp)
+
+# Image resizing of test data into single numpy array
+temp = []
+for img_name in test.ID:
+    img_path = os.path.join('/content/Test', img_name)
+    img = imageio.imread(img_path)
+    img = np.array(Image.fromarray(img).resize((32,32))).astype('float32')
+    temp.append(img)
+
+test_x = np.stack(temp)
+
+# Normalizing the images
+train_x = train_x / 255.
+test_x = test_x / 255.
+
+# Encoding the categorical variable to numeric
+lb = LabelEncoder()
+train_y = lb.fit_transform(train.Class)
+train_y = keras.utils.np_utils.to_categorical(train_y)
+
+# Specifying all the parameters we will be using in our network
+input_num_units = (32, 32, 3)
+hidden_num_units = 500
+output_num_units = 3
+
+epochs = 5
+batch_size = 128
+
+# Defining the network
+model = Sequential([
+  InputLayer(input_shape=input_num_units),
+  Flatten(),
+  Dense(units=hidden_num_units, activation='relu'),
+  Dense(units=output_num_units, activation='softmax'),
+])
+
+# Printing model summary
+model.summary()
+
+# Compiling and Training Network
+model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(train_x, train_y, batch_size=batch_size,epochs=epochs,verbose=1)
+
+# Training model along with validation data
+model.fit(train_x, train_y, batch_size=batch_size,epochs=epochs,verbose=1, validation_split=0.2)
+
+# Predicting and importing the result in a csv file
+pred = np.argmax(model.predict(test_x),axis=1)
+pred = lb.inverse_transform(pred)
+
+test['Class'] = pred
+test.to_csv('out.csv', index=False)
+
+# Visual Inspection of predictions
+idx = 2481
+img_name = test.ID[idx]
+img = imageio.imread(os.path.join('/content/Test', img_name))
+plt.imshow(np.array(Image.fromarray(img).resize((128, 128))))
+pred = np.argmax(model.predict(test_x),axis=1)
+print('Original:', train.Class[idx])
+print('Predicted:', lb.inverse_transform([pred[idx]]))`,
+        result:
+`Result:
+<ipython-input-1-b5e04c5b5b2f>:27: DeprecationWarning: Starting with ImageIO v3 the 
+behavior of this function will switch to that of iio.v3.imread. To keep the current behavior 
+(and make this warning disappear) use import imageio.v2 as imageio or call 
+imageio.v2.imread directly. 
+  img = imageio.imread(img_path) 
+<ipython-input-1-b5e04c5b5b2f>:37: DeprecationWarning: Starting with ImageIO v3 the 
+behavior of this function will switch to that of iio.v3.imread. To keep the current behavior 
+(and make this warning disappear) use import imageio.v2 as imageio or call 
+imageio.v2.imread directly. 
+  img = imageio.imread(img_path) 
+Model: "sequential" 
+_________________________________________________________________ 
+ Layer (type)                Output Shape              Param #    
+================================================================= 
+ flatten (Flatten)           (None, 3072)              0          
+                                                                  
+ dense (Dense)               (None, 500)               1536500    
+                                                                  
+ dense_1 (Dense)             (None, 3)                 1503       
+                                                                  
+================================================================= 
+Total params: 1,538,003 
+Trainable params: 1,538,003 
+Non-trainable params: 0 
+_________________________________________________________________ 
+Epoch 1/5 
+156/156 [==============================] - 4s 24ms/step - loss: 0.8982 - accuracy: 
+0.5728 
+Epoch 2/5 
+156/156 [==============================] - 4s 24ms/step - loss: 0.8481 - accuracy: 
+0.6041 
+Epoch 3/5 
+8 
+ 
+156/156 [==============================] - 5s 31ms/step - loss: 0.8273 - accuracy: 
+0.6135 
+Epoch 4/5 
+156/156 [==============================] - 4s 23ms/step - loss: 0.8143 - accuracy: 
+0.6223 
+Epoch 5/5 
+156/156 [==============================] - 4s 23ms/step - loss: 0.8069 - accuracy: 
+0.6277 
+Epoch 1/5 
+125/125 [==============================] - 5s 38ms/step - loss: 0.8016 - accuracy: 
+0.6314 - val_loss: 0.8577 - val_accuracy: 0.5881 
+Epoch 2/5 
+125/125 [==============================] - 4s 29ms/step - loss: 0.7955 - accuracy: 
+0.6341 - val_loss: 0.7877 - val_accuracy: 0.6459 
+Epoch 3/5 
+125/125 [==============================] - 4s 29ms/step - loss: 0.7909 - accuracy: 
+0.6393 - val_loss: 0.7802 - val_accuracy: 0.6429 
+Epoch 4/5 
+125/125 [==============================] - 4s 31ms/step - loss: 0.7857 - accuracy: 
+0.6436 - val_loss: 0.7741 - val_accuracy: 0.6509 
+Epoch 5/5 
+125/125 [==============================] - 4s 35ms/step - loss: 0.7860 - accuracy: 
+0.6410 - val_loss: 0.7810 - val_accuracy: 0.6494 
+208/208 [==============================] - 1s 6ms/step 
+  1/208 [..............................] - ETA: 4s<ipython-input-1-b5e04c5b5b2f>:90: 
+DeprecationWarning: Starting with ImageIO v3 the behavior of this function will switch to 
+that of iio.v3.imread. To keep the current behavior (and make this warning disappear) use 
+import imageio.v2 as imageio or call imageio.v2.imread directly. 
+  img = imageio.imread(os.path.join('/content/Test', img_name)) 
+208/208 [==============================] - 1s 6ms/step 
+Original: MIDDLE 
+Predicted: ['YOUNG'] `,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:3]{index=3}'
+      },
+
+      {
+        id:3,
+        title:'EXERCISE - 3: Design a CNN with Hyperparameter Tuning (MNIST)',
+        aim:'Design a CNN for Image Recognition which includes hyper parameter tuning.',
+        code:
+`import numpy as np 
+import tensorflow as tf 
+from tensorflow.keras.datasets import mnist 
+from tensorflow.keras.models import Sequential 
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense 
+from tensorflow.keras.wrappers.scikit_learn import KerasClassifier 
+from sklearn.model_selection import RandomizedSearchCV 
+from sklearn.metrics import accuracy_score 
+ 
+# Load and preprocess the MNIST dataset 
+(x_train, y_train), (x_test, y_test) = mnist.load_data() 
+x_train = x_train.reshape(-1, 28, 28, 1).astype(np.float32) / 255.0        
+ 
+#In this case, -1 is used in the first dimension to indicate that the size of that dimension 
+should be automatically calculated based on the other dimensions. The resulting shape will be 
+(num_samples, 28, 28, 1). 
+x_test = x_test.reshape(-1, 28, 28, 1).astype(np.float32) / 255.0 
+y_train = tf.keras.utils.to_categorical(y_train, num_classes=10) 
+y_test = tf.keras.utils.to_categorical(y_test, num_classes=10) 
+ 
+# Define the function to create a CNN model 
+def create_model(filters=32, kernel_size=(3, 3), pool_size=(2, 2), dense_units=128): 
+    model = Sequential([ 
+        Conv2D(filters, kernel_size, activation='relu', input_shape=(28, 28, 1)), 
+        MaxPooling2D(pool_size=pool_size), Flatten(), Dense(dense_units, activation='relu'), 
+        Dense(10, activation='softmax') 
+    ]) 
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy']) 
+    return model 
+11 
+ 
+# Create a Keras wrapper for scikit-learn API 
+#The KerasClassifier is a wrapper class that takes a function that creates a Keras model as an 
+argument.This function is typically referred to as the build_fn. 
+ 
+model = KerasClassifier(build_fn=create_model, verbose=0) 
+ 
+# Define hyperparameters and their possible values for tuning 
+param_dist = { 
+    'filters': [16, 32, 64],     'kernel_size': [(3, 3), (5, 5)],     'pool_size': [(2, 2), (3, 3)], 
+    'dense_units': [64, 128, 256] 
+} 
+ 
+# Perform randomized search cross-validation for hyperparameter tuning 
+random_search = RandomizedSearchCV(estimator=model, param_distributions=param_dist, 
+n_iter=10, cv=3, verbose=2)    
+# verbose=2 means more detailed output during the search process. 
+random_search_result = random_search.fit(x_train, y_train)                                           
+ # cv=3 means 3-fold cross-validation (3 sub sets). 
+ 
+# Print the best parameters and accuracy 
+print("Best Parameters:", random_search_result.best_params_) 
+best_model = random_search_result.best_estimator_ 
+y_pred = best_model.predict(x_test) 
+accuracy = accuracy_score(np.argmax(y_test, axis=1), y_pred) 
+print("Test Accuracy:", accuracy) `,
+        result:
+`Result:
+Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz 
+11490434/11490434 [==============================] - 0s 0us/step 
+<ipython-input-1-cb2fd6eb48c0>:36: DeprecationWarning: KerasClassifier is deprecated, 
+use Sci-Keras (https://github.com/adriangb/scikeras) instead. See 
+https://www.adriangb.com/scikeras/stable/migration.html for help migrating. 
+  model = KerasClassifier(build_fn=create_model, verbose=0) 
+Fitting 3 folds for each of 10 candidates, totalling 30 fits 
+12 
+ 
+[CV] END dense_units=128, filters=64, kernel_size=(3, 3), pool_size=(2, 2); total time= 
+1.2min 
+[CV] END dense_units=128, filters=64, kernel_size=(3, 3), pool_size=(2, 2); total time= 
+1.5min 
+[CV] END dense_units=128, filters=64, kernel_size=(3, 3), pool_size=(2, 2); total time= 
+1.5min 
+[CV] END dense_units=64, filters=64, kernel_size=(3, 3), pool_size=(2, 2); total time=  
+53.2s 
+[CV] END dense_units=64, filters=64, kernel_size=(3, 3), pool_size=(2, 2); total time=  
+53.2s 
+[CV] END dense_units=64, filters=64, kernel_size=(3, 3), pool_size=(2, 2); total time=  
+43.1s 
+[CV] END dense_units=128, filters=64, kernel_size=(3, 3), pool_size=(3, 3); total time=  
+46.6s 
+[CV] END dense_units=128, filters=64, kernel_size=(3, 3), pool_size=(3, 3); total time=  
+47.6s 
+[CV] END dense_units=128, filters=64, kernel_size=(3, 3), pool_size=(3, 3); total time=  
+37.8s 
+[CV] END dense_units=128, filters=16, kernel_size=(5, 5), pool_size=(3, 3); total time=  
+27.1s 
+[CV] END dense_units=128, filters=16, kernel_size=(5, 5), pool_size=(3, 3); total time=  
+27.3s 
+[CV] END dense_units=128, filters=16, kernel_size=(5, 5), pool_size=(3, 3); total time=  
+27.3s 
+[CV] END dense_units=256, filters=16, kernel_size=(3, 3), pool_size=(2, 2); total time=  
+47.8s 
+[CV] END dense_units=256, filters=16, kernel_size=(3, 3), pool_size=(2, 2); total time=  
+46.0s 
+[CV] END dense_units=256, filters=16, kernel_size=(3, 3), pool_size=(2, 2); total time=  
+31.1s 
+[CV] END dense_units=64, filters=16, kernel_size=(5, 5), pool_size=(2, 2); total time=  
+26.9s 
+[CV] END dense_units=64, filters=16, kernel_size=(5, 5), pool_size=(2, 2); total time=  
+25.0s 
+13 
+ 
+[CV] END dense_units=64, filters=16, kernel_size=(5, 5), pool_size=(2, 2); total time=  
+23.8s 
+[CV] END dense_units=256, filters=32, kernel_size=(3, 3), pool_size=(3, 3); total time=  
+46.1s 
+[CV] END dense_units=256, filters=32, kernel_size=(3, 3), pool_size=(3, 3); total time=  
+46.5s 
+[CV] END dense_units=256, filters=32, kernel_size=(3, 3), pool_size=(3, 3); total time=  
+46.6s 
+[CV] END dense_units=64, filters=64, kernel_size=(5, 5), pool_size=(3, 3); total time=  
+48.2s 
+[CV] END dense_units=64, filters=64, kernel_size=(5, 5), pool_size=(3, 3); total time=  
+53.3s 
+[CV] END dense_units=64, filters=64, kernel_size=(5, 5), pool_size=(3, 3); total time=  
+40.0s 
+[CV] END dense_units=64, filters=64, kernel_size=(3, 3), pool_size=(3, 3); total time=  
+47.8s 
+[CV] END dense_units=64, filters=64, kernel_size=(3, 3), pool_size=(3, 3); total time=  
+47.8s 
+[CV] END dense_units=64, filters=64, kernel_size=(3, 3), pool_size=(3, 3); total time=  
+47.9s 
+[CV] END dense_units=64, filters=16, kernel_size=(3, 3), pool_size=(2, 2); total time=  
+21.0s 
+[CV] END dense_units=64, filters=16, kernel_size=(3, 3), pool_size=(2, 2); total time=  
+25.2s 
+[CV] END dense_units=64, filters=16, kernel_size=(3, 3), pool_size=(2, 2); total time=  
+25.0s 
+Best Parameters: {'pool_size': (3, 3), 'kernel_size': (5, 5), 'filters': 64, 'dense_units': 64} 
+313/313 [==============================] - 2s 7ms/step 
+ 
+Test Accuracy: 0.9834 `,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:4]{index=4}'
+      },
+
+      {
+        id:4,
+        title:'EXERCISE - 4: RNN (LSTM) for Sequential Prediction',
+        aim:'Implement a Recurrent Neural Network for Predicting Sequential Data.',
+        code:
+`import numpy as np 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+import keras 
+from keras.models import Sequential 
+from keras.layers import LSTM 
+from keras.layers.core import Dense, Activation, Dropout 
+from sklearn.preprocessing import MinMaxScaler 
+ 
+# Loading data 
+data = pd.read_csv('/content/INFY20002008.csv') 
+#data.info() # information about Dataset 
+ 
+# Selecting three columns as input 
+data = data[['Last Price', 'Average Price', 'Open Price']].values 
+ 
+plt.figure(figsize=(10, 6)) 
+plt.plot(data[:,0]+500, '--g', label='Last Price') 
+plt.plot(data[:,1], '--r', label='Average Price') 
+plt.plot(data[:,2]-500, '--b', label='Open Price') 
+plt.xlabel('Days', fontsize=15) 
+plt.ylabel('Price', fontsize=15) 
+plt.suptitle('Plot of Last, Average and Open price', fontsize=18, weight='bold') 
+plt.title('with added noise to prevent overlapping') 
+plt.legend() 
+plt.show() 
+ 
+# Scaling the values in the range of 0 to 1 
+scaler = MinMaxScaler(feature_range=(0,1)) 
+15 
+ 
+scaled_data = scaler.fit_transform(data[:,:]) 
+ 
+# Splitting dataset in the ratio of 75:25 for training and test 
+train_size = int(scaled_data.shape[0] * 0.75) 
+train, test = scaled_data[0:train_size, :], scaled_data[train_size:scaled_data.shape[0], :] 
+print("Number of entries (training set, test set): " + str((len(train), len(test)))) 
+ 
+def create_dataset(ser, window_size=1): 
+    data_X, data_Y = [], [] 
+    for i in range(len(ser) - window_size - 1): 
+        a = [] 
+        for j in range(0, window_size): 
+            a.append(ser[[(i+j)], :]) 
+        data_X.append(a) 
+        data_Y.append(ser[i + window_size, 1]) 
+    return(np.array(data_X), np.array(data_Y)) 
+window_size = 50 
+train_X, train_Y = create_dataset(train, window_size) 
+test_X, test_Y = create_dataset(test, window_size) 
+print("Original training data shape:") 
+print(train_X.shape, test_X.shape) 
+ 
+# Reshape the input data into appropriate form for Keras. 
+train_X = np.reshape(train_X, (train_X.shape[0], train_X.shape[1], 3)) 
+test_X = np.reshape(test_X, (test_X.shape[0], test_X.shape[1], 3)) 
+print("New training data shape:") 
+print(train_X.shape, test_X.shape) 
+ 
+# Designing the LSTM model 
+model = Sequential() 
+model.add(LSTM(4, input_shape = (window_size, 3))) 
+model.add(Dense(1)) 
+ 
+# Compiling the model 
+16 
+ 
+model.compile(loss = "mean_squared_error", optimizer = "adam") 
+ 
+# Training the model 
+model.fit(train_X, train_Y, epochs=3, batch_size=1) 
+ 
+# Visualization 
+plt.figure(figsize = (15, 5)) 
+plt.plot(np.concatenate((train[:,1], test[:,1])), '--b', label='True value') 
+ 
+plt.plot(range(window_size, len(train_X) + window_size), model.predict(train_X), '-r', 
+label='Training set prediction') 
+plt.plot(range(window_size + len(train), len(train) + len(test) - 1), model.predict(test_X), '-g', 
+label='Test set prediction') 
+ 
+plt.xlabel("Days") 
+plt.ylabel("Average Price") 
+plt.title("Comparison true vs. predicted training / test", fontsize=16) 
+plt.legend() 
+plt.xlim(-5, 2500) 
+plt.show() `,
+        result:
+`Result:
+Number of entries (training set, test set): (1872, 624)
+Original training data shape:
+(1821, 50, 1, 3) (573, 50, 1, 3)
+New training data shape:
+(1821, 50, 3) (573, 50, 3)
+Epoch 1/3
+1821/1821 [==============================] - 25s 13ms/step - loss: 0.0018
+Epoch 2/3
+1821/1821 [==============================] - 19s 10ms/step - loss: 4.4835e-04
+Epoch 3/3
+1821/1821 [==============================] - 18s 10ms/step - loss: 3.4780e-04
+57/57 [==============================] - 1s 5ms/step
+18/18 [==============================] - 0s 4ms/step`,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:5]{index=5}'
+      },
+
+      {
+        id:5,
+        title:'EXERCISE - 5: MLP for Image Denoising',
+        aim:'Implement Multi-Layer Perceptron algorithm for Image denoising hyperparameter tuning.',
+        code:
+`import numpy as np 
+import tensorflow as tf 
+from tensorflow.keras.layers import Dense, Flatten 
+from tensorflow.keras.models import Sequential 
+from tensorflow.keras.optimizers import Adam 
+from tensorflow.keras.datasets import mnist 
+from tensorflow.keras.losses import MeanSquaredError 
+# Load the MNIST dataset 
+(x_train, _), (x_test, _) = mnist.load_data() 
+ 
+# Normalize and flatten the images 
+x_train = x_train.astype('float32') / 255.0 
+x_test = x_test.astype('float32') / 255.0 
+x_train = x_train.reshape((-1, 784)) 
+x_test = x_test.reshape((-1, 784)) 
+ 
+# Add Gaussian noise to the images for creating noisy data 
+noise_factor = 0.4 
+x_train_noisy = x_train + noise_factor * np.random.normal(size=x_train.shape) 
+x_test_noisy = x_test + noise_factor * np.random.normal(size=x_test.shape) 
+x_train_noisy = np.clip(x_train_noisy, 0., 1.) 
+x_test_noisy = np.clip(x_test_noisy, 0., 1.) 
+def build_mlp(input_shape): 
+    model = Sequential([ 
+        Dense(128, activation='relu', input_shape=input_shape), 
+        Dense(64, activation='relu'), 
+        Dense(128, activation='relu'), 
+        Dense(784, activation='sigmoid') 
+19 
+ 
+    ]) 
+    return model 
+ 
+input_shape = (784,) 
+model = build_mlp(input_shape) 
+model.compile(optimizer=Adam(learning_rate=0.001), loss=MeanSquaredError()) 
+batch_size = 128 
+epochs = 20 
+ 
+# Train the model 
+model.fit(x_train_noisy, x_train, batch_size=batch_size, epochs=epochs, 
+validation_split=0.1) 
+ 
+# Evaluate the denoising performance on test data 
+decoded_images = model.predict(x_test_noisy) 
+ 
+# Visualize some noisy images, denoised images, and original images 
+import matplotlib.pyplot as plt 
+ 
+num_images = 10 
+plt.figure(figsize=(18, 4)) 
+ 
+for i in range(num_images): 
+    # Noisy image 
+    ax = plt.subplot(3, num_images, i + 1) 
+    plt.imshow(x_test_noisy[i].reshape(28, 28)) 
+    plt.gray() 
+    ax.get_xaxis().set_visible(False) 
+    ax.get_yaxis().set_visible(False) 
+ 
+    # Denoised image 
+    ax = plt.subplot(3, num_images, i + 1 + num_images) 
+    plt.imshow(decoded_images[i].reshape(28, 28)) 
+    plt.gray() 
+20 
+ 
+    ax.get_xaxis().set_visible(False) 
+    ax.get_yaxis().set_visible(False) 
+ 
+    # Original image 
+    ax = plt.subplot(3, num_images, i + 1 + 2*num_images) 
+    plt.imshow(x_test[i].reshape(28, 28)) 
+    plt.gray() 
+    ax.get_xaxis().set_visible(False) 
+    ax.get_yaxis().set_visible(False) 
+ 
+plt.show()`,
+        result:
+`Result:
+Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz 
+11490434/11490434 [==============================] - 0s 0us/step 
+Epoch 1/20 
+422/422 [==============================] - 5s 10ms/step - loss: 0.0479 - val_loss: 
+0.0292 
+Epoch 2/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0253 - val_loss: 
+0.0225 
+Epoch 3/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0211 - val_loss: 
+0.0197 
+Epoch 4/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0189 - val_loss: 
+0.0183 
+Epoch 5/20 
+422/422 [==============================] - 4s 9ms/step - loss: 0.0177 - val_loss: 
+0.0173 
+Epoch 6/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0167 - val_loss: 
+0.0167 
+Epoch 7/20 
+21 
+ 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0160 - val_loss: 
+0.0160 
+Epoch 8/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0155 - val_loss: 
+0.0155 
+Epoch 9/20 
+422/422 [==============================] - 4s 9ms/step - loss: 0.0151 - val_loss: 
+0.0153 
+Epoch 10/20 
+422/422 [==============================] - 4s 9ms/step - loss: 0.0148 - val_loss: 
+0.0149 
+Epoch 11/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0144 - val_loss: 
+0.0146 
+Epoch 12/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0142 - val_loss: 
+0.0143 
+Epoch 13/20 
+422/422 [==============================] - 4s 9ms/step - loss: 0.0139 - val_loss: 
+0.0144 
+Epoch 14/20 
+422/422 [==============================] - 4s 9ms/step - loss: 0.0137 - val_loss: 
+0.0139 
+Epoch 15/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0135 - val_loss: 
+0.0138 
+Epoch 16/20 
+422/422 [==============================] - 4s 10ms/step - loss: 0.0133 - val_loss: 
+0.0136 
+Epoch 17/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0132 - val_loss: 
+0.0135 
+Epoch 18/20 
+22 
+ 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0130 - val_loss: 
+0.0134 
+Epoch 19/20 
+422/422 [==============================] - 3s 7ms/step - loss: 0.0129 - val_loss: 
+0.0132 
+Epoch 20/20 
+422/422 [==============================] - 4s 9ms/step - loss: 0.0128 - val_loss: 
+0.0132 
+313/313 [==============================] - 1s 2ms/step `,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:6]{index=6}'
+      },
+
+      {
+        id:6,
+        title:'EXERCISE - 6: Object Detection Using YOLO',
+        aim:'Implement Object Detection Using YOLO.',
+        code:
+`!apt-get install unrar 
+!unrar x /content/yolodemo.rar 
+pip install tensorflow opencv-python 
+!pip install opencv-python-headless 
+""" 
+import cv2 
+from google.colab.patches import cv2_imshow 
+import numpy as np 
+ 
+# Load YOLO model 
+net = cv2.dnn.readNet('/content/yolodemo/yolo-coco/yolov3.weights', 
+'/content/yolodemo/yolo-coco/yolov3.cfg') 
+# Load classes (coco.names contains names of objects the model can detect) 
+classes = [] 
+with open('/content/yolodemo/coco.names', 'r') as f: 
+    classes = f.read().strip().split('\n') 
+ 
+# Load image 
+image = cv2.imread('/content/yolodemo/images/persons.png') 
+ 
+# Preprocess image 
+blob = cv2.dnn.blobFromImage(image, scalefactor=1/255.0, size=(416, 416), swapRB=True, 
+crop=False) 
+net.setInput(blob) 
+ 
+# Perform object detection 
+24 
+ 
+layer_names = net.getUnconnectedOutLayersNames() 
+outputs = net.forward(layer_names) 
+ 
+# Process output and draw bounding boxes 
+conf_threshold = 0.5 
+nms_threshold = 0.4 
+ 
+for output in outputs: 
+    for detection in output: 
+        scores = detection[5:] 
+        class_id = np.argmax(scores) 
+        confidence = scores[class_id] 
+ 
+        if confidence > conf_threshold: 
+            # Get bounding box coordinates 
+            box = detection[0:4] * np.array([image.shape[1], image.shape[0], image.shape[1], 
+image.shape[0]]) 
+            (center_x, center_y, width, height) = box.astype('int') 
+ 
+            # Draw bounding box and label 
+            x = int(center_x - (width / 2)) 
+            y = int(center_y - (height / 2)) 
+ 
+ 
+            cv2.rectangle(image, (x, y), (x + width, y + height), (0, 255, 0), 2) 
+            label = f'{classes[class_id]}: {confidence:.2f}' 
+            cv2.putText(image, label, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 
+0), 2) 
+ 
+ 
+# Display the image with detected objects 
+cv2_imshow(image)   #instead of cv2.imshow use cv2_imshow 
+cv2.waitKey(0) 
+cv2.destroyAllWindows() 
+`,
+        result:
+`Result:
+(After running, the image is displayed with detected bounding boxes and labels.)
+cv2_imshow(image) used in Colab to display the result, then cv2.waitKey(0), cv2.destroyAllWindows()`,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:7]{index=7}'
+      },
+
+      {
+        id:7,
+        title:'EXERCISE - 7: Robust Bi-Tempered Logistic Loss',
+        aim:'Design a Deep learning Network for Robust Bi-Tempered Logistic Loss.',
+        code:
+`import numpy as np 
+import tensorflow as tf 
+from tensorflow.keras.models import Sequential 
+from tensorflow.keras.layers import Dense 
+import matplotlib.pyplot as plt 
+ 
+# Define the Robust Bi-Tempered Logistic Loss function with fixed t1 and t2 
+def create_robust_bi_tempered_loss(t1, t2, label_smoothing=0.0): 
+    #The @tf.function decorator is used in TensorFlow to convert a regular Python function 
+into a TensorFlow computation graph. 
+    @tf.function    
+    def loss(y_true, y_pred): 
+        y_pred = tf.clip_by_value(y_pred, 1e-7, 1.0 - 1e-7)  
+        y_true = tf.cast(y_true, y_pred.dtype) 
+        term1 = (1 - y_true) * (tf.math.pow(1 - y_pred, t2 - 1)) 
+        term2 = y_true * (tf.math.pow(y_pred, t1 - 1)) 
+        loss_value = -(term1 + term2) 
+        if label_smoothing > 0.0: 
+            loss_value += label_smoothing * y_true * tf.math.log(y_true / y_pred) 
+        return tf.reduce_mean(loss_value) 
+    return loss 
+ 
+# Create a Binary Classification Model 
+input_dim = 20  # Example input dimension 
+num_classes = 1  # Binary classification 
+model = Sequential([ 
+    Dense(128, activation='relu', input_dim=input_dim), 
+    Dense(num_classes, activation='sigmoid') 
+]) 
+27 
+ 
+# Compile the Model with RBL Loss 
+t1 = 0.8   # Temperature parameter 1 
+t2 = 1.2   # Temperature parameter 2 
+label_smoothing = 0.1   # Optional label smoothing 
+rbl_loss = create_robust_bi_tempered_loss(t1, t2, label_smoothing) 
+model.compile(optimizer='adam', loss=rbl_loss, metrics=['accuracy']) 
+ 
+# Save the model 
+model.save('trained_model.h5') 
+ 
+# Load the Trained Model for Prediction 
+loaded_model = tf.keras.models.load_model('trained_model.h5', custom_objects={'loss': 
+rbl_loss}) 
+ 
+# Preprocess New Data for Prediction 
+new_data = np.random.rand(5, input_dim)  # Replace with your new data 
+# Make Predictions 
+predictions = loaded_model.predict(new_data) 
+predicted_classes = (predictions > 0.5).astype(int) 
+print(predictions) 
+print("Predicted Classes:", predicted_classes) `,
+        result:
+`Result:
+1/1 [==============================] - 0s 175ms/step
+[[0.63754183]
+ [0.6558753 ]
+ [0.6071969 ]
+ [0.5628828 ]
+ [0.67136395]]
+Predicted Classes: [[1]
+ [1]
+ [1]
+ [1]
+ [1]]`,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:8]{index=8}'
+      },
+
+      {
+        id:8,
+        title:'EXERCISE - 8: Build AlexNet (Advanced CNN)',
+        aim:'Build AlexNet using Advanced CNN.',
+        code:
+`import tensorflow as tf 
+from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, BatchNormalization, 
+Flatten, Dense, Dropout 
+ 
+# Define the AlexNet-inspired architecture for CIFAR-10 
+def create_alexnet_cifar(input_shape, num_classes): 
+    input_layer = Input(shape=input_shape) 
+ 
+    # First convolutional layer 
+    conv1 = Conv2D(64, (3, 3), padding='same', activation='relu')(input_layer) 
+    pool1 = MaxPooling2D((2, 2))(conv1) 
+    norm1 = BatchNormalization()(pool1) 
+ 
+    # Second convolutional layer 
+    conv2 = Conv2D(128, (3, 3), padding='same', activation='relu')(norm1) 
+    pool2 = MaxPooling2D((2, 2))(conv2) 
+    norm2 = BatchNormalization()(pool2) 
+ 
+    # Three convolutional layers 
+    conv3 = Conv2D(256, (3, 3), padding='same', activation='relu')(norm2) 
+    conv4 = Conv2D(256, (3, 3), padding='same', activation='relu')(conv3) 
+    conv5 = Conv2D(128, (3, 3), padding='same', activation='relu')(conv4) 
+    pool3 = MaxPooling2D((2, 2))(conv5) 
+    norm3 = BatchNormalization()(pool3) 
+ 
+    # Flatten and fully connected layers 
+    flatten = Flatten()(norm3) 
+    fc1 = Dense(512, activation='relu')(flatten) 
+    dropout1 = Dropout(0.5)(fc1) 
+29 
+ 
+    fc2 = Dense(256, activation='relu')(dropout1) 
+    dropout2 = Dropout(0.5)(fc2) 
+    output_layer = Dense(num_classes, activation='softmax')(dropout2) 
+    model = tf.keras.Model(inputs=input_layer, outputs=output_layer) 
+    return model 
+ 
+# Set hyperparameters 
+input_shape = (32, 32, 3)  # Input shape for CIFAR-10 
+num_classes = 10  # Number of classes in CIFAR-10 dataset 
+ 
+# Create the model 
+model = create_alexnet_cifar(input_shape, num_classes) 
+ 
+# Display the model summary 
+model.summary()`,
+        result:
+`Result:
+Model: "model" 
+_________________________________________________________________________ 
+ Layer (type)                    Output Shape              Param #    
+================================================================= 
+ input_1 (InputLayer)            [(None, 32, 32, 3)]       0          
+                                                                  
+ conv2d (Conv2D)                 (None, 32, 32, 64)        1792       
+                                                                  
+ max_pooling2d (MaxPooling2D)     (None, 16, 16, 64)       0                                                                
+                                                                  
+ batch_normalization (BatchNormalization)   (None, 16, 16, 64)       256        
+                                                                   
+ conv2d_1 (Conv2D)               (None, 16, 16, 128)       73856      
+                                                                  
+ max_pooling2d_1 (MaxPooling2D)    (None, 8, 8, 128)           0          
+                                                             
+                                                                  
+30 
+ 
+ batch_normalization_1 (BatchNormalization) (None, 8, 8, 128)        512        
+                                                                  
+ conv2d_2 (Conv2D)               (None, 8, 8, 256)         295168     
+                                                                  
+ conv2d_3 (Conv2D)               (None, 8, 8, 256)         590080     
+                                                                  
+ conv2d_4 (Conv2D)               (None, 8, 8, 128)         295040     
+                                                                  
+ max_pooling2d_2 (MaxPooling  2D)  (None, 4, 4, 128)        0          
+                                                                  
+ batch_normalization_2 (BatchNormalization) (None, 4, 4, 128)        512        
+                                                                   
+ flatten (Flatten)               (None, 2048)              0          
+                                                                  
+ dense (Dense)                   (None, 512)               1049088    
+                                                                  
+ dropout (Dropout)               (None, 512)               0          
+                                                                  
+ dense_1 (Dense)                 (None, 256)               131328     
+                                                                  
+ dropout_1 (Dropout)             (None, 256)               0          
+                                                                  
+ dense_2 (Dense)                 (None, 10)                2570       
+                                                                  
+================================================================= 
+Total params: 2,440,202 
+Trainable params: 2,439,562 
+Non-trainable params: 640 `,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:9]{index=9}'
+      },
+
+      {
+        id:9,
+        title:'EXERCISE - 9: Demonstration of Autoencoders',
+        aim:'Demonstration of Application of Autoencoders.',
+        code:
+`import numpy as np 
+import matplotlib.pyplot as plt 
+import tensorflow as tf 
+from tensorflow.keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D 
+from tensorflow.keras.models import Model 
+ 
+# Load and preprocess the dataset (MNIST) 
+(x_train, _), (x_test, _) = tf.keras.datasets.mnist.load_data() 
+x_train = x_train.astype('float32') / 255.0 
+x_test = x_test.astype('float32') / 255.0 
+ 
+# Add noise to the images 
+noise_factor = 0.5 
+x_train_noisy = x_train + noise_factor * np.random.normal(loc=0.0, scale=1.0, 
+size=x_train.shape) 
+x_test_noisy = x_test + noise_factor * np.random.normal(loc=0.0, scale=1.0, 
+size=x_test.shape) 
+x_train_noisy = np.clip(x_train_noisy, 0.0, 1.0) 
+x_test_noisy = np.clip(x_test_noisy, 0.0, 1.0) 
+ 
+# Define the autoencoder architecture 
+input_img = Input(shape=(28, 28, 1)) 
+x = Conv2D(32, (3, 3), activation='relu', padding='same')(input_img) 
+x = MaxPooling2D((2, 2), padding='same')(x) 
+x = Conv2D(32, (3, 3), activation='relu', padding='same')(x) 
+encoded = MaxPooling2D((2, 2), padding='same')(x) 
+x = Conv2D(32, (3, 3), activation='relu', padding='same')(encoded) 
+x = UpSampling2D((2, 2))(x) 
+x = Conv2D(32, (3, 3), activation='relu', padding='same')(x) 
+32 
+ 
+x = UpSampling2D((2, 2))(x) 
+decoded = Conv2D(1, (3, 3), activation='sigmoid', padding='same')(x) 
+autoencoder = Model(input_img, decoded) 
+autoencoder.compile(optimizer='adam', loss='binary_crossentropy') 
+ 
+# Train the autoencoder 
+autoencoder.fit(x_train_noisy, x_train, 
+                epochs=10, 
+                batch_size=128, 
+                shuffle=True, 
+                validation_data=(x_test_noisy, x_test)) 
+ 
+# Denoise images using the trained autoencoder 
+decoded_imgs = autoencoder.predict(x_test_noisy) 
+ 
+# Display original, noisy, and denoised images 
+n = 10 
+plt.figure(figsize=(20, 6)) 
+for i in range(n): 
+    # Original image 
+    ax = plt.subplot(3, n, i + 1) 
+    plt.imshow(x_test[i].reshape(28, 28)) 
+    plt.gray() 
+    ax.get_xaxis().set_visible(False) 
+    ax.get_yaxis().set_visible(False) 
+ 
+    # Noisy image 
+    ax = plt.subplot(3, n, i + 1 + n) 
+    plt.imshow(x_test_noisy[i].reshape(28, 28)) 
+    plt.gray() 
+    ax.get_xaxis().set_visible(False) 
+    ax.get_yaxis().set_visible(False) 
+ 
+    # Denoised image 
+33 
+ 
+    ax = plt.subplot(3, n, i + 1 + 2*n) 
+    plt.imshow(decoded_imgs[i].reshape(28, 28)) 
+    plt.gray() 
+    ax.get_xaxis().set_visible(False) 
+    ax.get_yaxis().set_visible(False) 
+plt.show()`,
+        result:
+`Result:
+Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz 
+11490434/11490434 [==============================] - 0s 0us/step 
+Epoch 1/10 
+469/469 [==============================] - 181s 383ms/step - loss: 0.1718 - 
+val_loss: 0.1195 
+Epoch 2/10 
+469/469 [==============================] - 172s 367ms/step - loss: 0.1150 - 
+val_loss: 0.1101 
+Epoch 3/10 
+469/469 [==============================] - 172s 366ms/step - loss: 0.1089 - 
+val_loss: 0.1061 
+Epoch 4/10 
+469/469 [==============================] - 173s 369ms/step - loss: 0.1058 - 
+val_loss: 0.1035 
+Epoch 5/10 
+469/469 [==============================] - 173s 369ms/step - loss: 0.1036 - 
+val_loss: 0.1018 
+Epoch 6/10 
+469/469 [==============================] - 175s 372ms/step - loss: 0.1020 - 
+val_loss: 0.1005 
+Epoch 7/10 
+469/469 [==============================] - 172s 366ms/step - loss: 0.1009 - 
+val_loss: 0.0995 
+Epoch 8/10 
+469/469 [==============================] - 172s 367ms/step - loss: 0.1000 - 
+val_loss: 0.0987 
+34 
+ 
+Epoch 9/10 
+469/469 [==============================] - 175s 374ms/step - loss: 0.0993 - 
+val_loss: 0.0980 
+Epoch 10/10 
+469/469 [==============================] - 171s 365ms/step - loss: 0.0988 - 
+val_loss: 0.0983 
+313/313 [==============================] - 8s 25ms/step`,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:10]{index=10}'
+      },
+
+      {
+        id:10,
+        title:'EXERCISE - 10: Demonstration of GAN (Generative Adversarial Network)',
+        aim:'Demonstration of GAN (Generative Adversarial Network).',
+        code:
+`import numpy as np 
+import matplotlib.pyplot as plt 
+import tensorflow as tf 
+from tensorflow.keras.layers import Dense 
+from tensorflow.keras.models import Sequential 
+ 
+# Generator model 
+generator = Sequential([ 
+    Dense(128, input_shape=(100,), activation='relu'), 
+    Dense(784, activation='sigmoid') 
+]) 
+ 
+# Discriminator model 
+discriminator = Sequential([ 
+    Dense(128, input_shape=(784,), activation='relu'), 
+    Dense(1, activation='sigmoid') 
+]) 
+ 
+# Compile discriminator 
+discriminator.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) 
+ 
+# Combined model (stacked generator and discriminator) 
+discriminator.trainable = False 
+combined = Sequential([generator, discriminator]) 
+combined.compile(optimizer='adam', loss='binary_crossentropy') 
+ 
+# Load MNIST dataset 
+(x_train, _), (_, _) = tf.keras.datasets.mnist.load_data() 
+x_train = x_train.reshape(-1, 784) / 255.0 
+36 
+ 
+# Training loop 
+epochs = 10000 
+batch_size = 64 
+ 
+for epoch in range(epochs): 
+    # Train discriminator 
+    real_images = x_train[np.random.randint(0, x_train.shape[0], batch_size)] 
+    fake_images = generator.predict(np.random.randn(batch_size, 100)) 
+    discriminator_loss_real = discriminator.train_on_batch(real_images, np.ones((batch_size, 
+1))) 
+    discriminator_loss_fake = discriminator.train_on_batch(fake_images, 
+np.zeros((batch_size, 1))) 
+    discriminator_loss = 0.5 * np.add(discriminator_loss_real, discriminator_loss_fake) 
+ 
+    # Train generator 
+    noise = np.random.randn(batch_size, 100) 
+    generator_loss = combined.train_on_batch(noise, np.ones((batch_size, 1))) 
+ 
+    if epoch % 1000 == 0: 
+        print(f"Epoch: {epoch}, D Loss: {discriminator_loss[0]}, G Loss: {generator_loss}") 
+ 
+        # Generate and plot images 
+        generated_images = generator.predict(np.random.randn(10, 100)) 
+        plt.figure(figsize=(7, 7)) 
+        for i in range(10): 
+            plt.subplot(1, 10, i+1) 
+            plt.imshow(generated_images[i].reshape(28, 28), cmap='gray') 
+            plt.axis('off') 
+        plt.show() `,
+        result:
+`Result:
+Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz 
+11490434/11490434 [==============================] - 0s 0us/step 
+2/2 [==============================] - 0s 5ms/step 
+37 
+ 
+Epoch: 0, D Loss: 1.15574049949646, G Loss: 0.865715503692627 
+1/1 [==============================] - 0s 35ms/step 
+ 
+Epoch: 1000, D Loss: 0.005416138679720461, G Loss: 8.305022239685059 
+1/1 [==============================] - 0s 17ms/step 
+ 
+Epoch: 2000, D Loss: 0.0018298850336577743, G Loss: 13.786312103271484 
+1/1 [==============================] - 0s 14ms/step 
+ 
+Epoch: 3000, D Loss: 0.0035641974536702037, G Loss: 8.086578369140625 
+1/1 [==============================] - 0s 14ms/step 
+ 
+Epoch: 4000, D Loss: 0.013586459215730429, G Loss: 6.605484962463379 
+1/1 [==============================] - 0s 17ms/step 
+ 
+Epoch: 5000, D Loss: 0.042879847809672356, G Loss: 5.631101608276367 
+1/1 [==============================] - 0s 17ms/step 
+ 
+Epoch: 6000, D Loss: 0.13714924454689026, G Loss: 4.428217887878418 
+1/1 [==============================] - 0s 17ms/step 
+ 
+Epoch: 7000, D Loss: 0.356029212474823, G Loss: 3.2198615074157715 
+1/1 [==============================] - 0s 15ms/step 
+38 
+ 
+ 
+Epoch: 8000, D Loss: 0.28962957859039307, G Loss: 2.318570613861084 
+1/1 [==============================] - 0s 21ms/step 
+ 
+Epoch: 9000, D Loss: 0.21806973218917847, G Loss: 2.7780983448028564 
+1/1 [==============================] - 0s 15ms/step `,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:11]{index=11}'
+      },
+
+      {
+        id:11,
+        title:'EXERCISE - 11: Capstone Project (Part 1)',
+        aim:'Complete the requirements given in capstone project (proposal, planning, literature review, data, etc.).',
+        code:
+`# Capstone project requirements and sample code shown in manual.
+# Example / suggested dataset: Fashion-MNIST usage sample provided in the manual (see Exercise 12 code).`,
+        result:
+`Result:
+Capstone guidelines listed (integration of knowledge, original research, real-world application, independence, supervision, presentation/defense, written report, dataset description etc.). See manual for complete text.`,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:12]{index=12}'
+      },
+
+      {
+        id:12,
+        title:'EXERCISE - 12: Capstone Project (Part 2 — Implementation Example)',
+        aim:'Continuation of capstone project requirements and code (example training with Fashion-MNIST).',
+        code:
+`from keras.datasets import fashion_mnist
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Flatten
+from tensorflow.keras.optimizers import Adam
+import matplotlib.pyplot as plt
+import numpy as np
+
+(trainX, trainy), (testX, testy) = fashion_mnist.load_data()
+trainX = np.expand_dims(trainX, -1)
+testX = np.expand_dims(testX, -1)
+
+def model_arch():
+    models = Sequential()
+    models.add(Conv2D(64, (5,5), padding="same", activation="relu", input_shape=(28,28,1)))
+    models.add(MaxPooling2D(pool_size=(2,2)))
+    models.add(Conv2D(128, (5,5), padding="same", activation="relu"))
+    models.add(MaxPooling2D(pool_size=(2,2)))
+    models.add(Conv2D(256, (5,5), padding="same", activation="relu"))
+    models.add(MaxPooling2D(pool_size=(2,2)))
+    models.add(Flatten())
+    models.add(Dense(256, activation="relu"))
+    models.add(Dense(10, activation="softmax"))
+    return models
+
+model = model_arch()
+model.compile(optimizer=Adam(learning_rate=1e-3), loss='sparse_categorical_crossentropy', metrics=['sparse_categorical_accuracy'])
+model.summary()
+history = model.fit(trainX.astype(np.float32), trainy.astype(np.float32), epochs=10, steps_per_epoch=100, validation_split=0.33)
+model.save_weights('./model.h5', overwrite=True)`,
+        result:
+`Result:
+Train: X =  (60000, 28, 28)
+Test: X =  (10000, 28, 28)
+(60000, 28, 28, 1)
+...
+Epoch 10/10
+100/100 [==============================] - 552s 6s/step - loss: 0.1676 - sparse_categorical_accuracy: 0.9384 - val_loss: 0.2785 - val_sparse_categorical_accuracy: 0.9058
+Prediction example: printed label e.g. 'shirt' for a sample test image.`,
+        citation:'Full content from Manual.pdf. :contentReference[oaicite:13]{index=13}'
+      }
+    ];
+
+    // render list
+    const listEl = document.getElementById('expList');
+    experiments.forEach(exp=>{
+      const card = document.createElement('div');
+      card.className = 'exp-card';
+      card.innerHTML = `<strong>${exp.title}</strong><div style="margin-top:6px;color:rgba(255,255,255,0.8)">${exp.aim}</div>`;
+      card.onclick = ()=>openExp(exp.id);
+      listEl.appendChild(card);
+    });
+
+    function showList(){
+      document.getElementById('expView').style.display='none';
+      document.getElementById('contentPlaceholder').style.display='block';
+      document.getElementById('backBtn').style.display='none';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function openExp(id){
+      const exp = experiments.find(e=>e.id===id);
+      if(!exp) return;
+      document.getElementById('contentPlaceholder').style.display='none';
+      document.getElementById('expView').style.display='block';
+      document.getElementById('backBtn').style.display='inline-flex';
+      document.getElementById('expTitle').textContent = exp.title;
+      document.getElementById('expAim').textContent = exp.aim;
+      document.getElementById('expCode').textContent = exp.code;
+      Prism.highlightElement(document.getElementById('expCode'));
+      document.getElementById('expResult').textContent = exp.result;
+      document.getElementById('expCitation').textContent = exp.citation;
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    // initial state
+    showList();
+  </script>
+</body>
+</html>
